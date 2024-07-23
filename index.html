@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="dark">
   <head>
@@ -31,19 +32,47 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        max-width: 500px;
         /* Constrain width to phone width */
         margin: 0 auto;
         height: 100vh;
         /* Full viewport height */
       }
   
-      .message {
-        max-width: 280px;
+      @media (max-width: 767px) {
+        .message {
+          max-width: 300px;
+        }
+
+        #chatSection {
+          max-width: 100%;
+        }
+ 
+        .input-group {
+          max-width: 100%;
+        }
+
+        .nav-width {
+          max-width: 100%;
+        }
       }
-  
-      .input-group {
-        max-width: 500px;
+
+      @media (min-width: 768px) {
+        .message {
+          max-width: 550px;
+        }
+        
+        #chatSection {
+          max-width: 75%;
+          
+        }
+        
+        .input-group {
+          max-width: 75%;
+        }
+
+        .nav-width {
+          max-width: 75%;
+        }
       }
   
       /* For Webkit-based browsers */
@@ -64,12 +93,13 @@
   </head>
   <body>
     <div id="authSection">
-      <nav class="container px-3 bg-body-tertiary navbar fixed-top navbar-expand-lg navbar-dark" style="max-width: 500px;">
-        <a class="navbar-brand fw-bold" href="#">Firebase Chat</a>
+      <nav class="container nav-width px-3 bg-body-tertiary navbar fixed-top navbar-expand-lg navbar-dark d-flex align-items-center">
+        <img class="rounded-circle" style="width: 32px; height: 32px;" src="https://cdn4.iconfinder.com/data/icons/google-i-o-2016/512/google_firebase-512.png">
+        <a class="navbar-brand fw-bold ms-2" href="#">Firebase Group Chat</a>
         <button id="signOutButton" class="btn border-0 fw-medium ms-auto link-body-emphasis p-0" style="display: none;">Sign Out</button>
         <button id="signInButton" class="btn border-0 fw-medium ms-auto link-body-emphasis p-0">Sign In with Google</button>
       </nav>
-      <div id="chatSection" class="d-flex flex-column vh-100 shadow" style="display: none;">
+      <div id="chatSection" class="d-flex flex-column vh-100 bg-dark-subtle" style="display: none;">
         <div id="messageArea" class="overflow-y-auto px-2 mt-5 mb-4 pt-2 pb-3"></div>
         <div id="sendMessage">
           <div class="input-group fixed-bottom container px-0">
@@ -175,13 +205,13 @@
         const urlPattern = /\bhttps?:\/\/\S+/gi;
         let formattedText = text.replace(urlPattern, (url) => {
           // Check if the URL is an image
-          if (/\.(png|jpg|jpeg|webp|gif)$/i.test(url)) {
-            return `<a href="${url}" target="_blank"><img class="img-fluid rounded-4" loading="lazy" src="${url}" alt="Image"></a>`;
+          if (/\.(png|jpg|jpeg|webp|gif|svg)$/i.test(url)) {
+            return `<a href="${url}" target="_blank"><img class="w-100 rounded-4" loading="lazy" src="${url}" alt="Image"></a>`;
           }
           // Check if the URL is a YouTube link
           const videoId = getYouTubeVideoId(url);
           if (videoId) {
-            return `<div class="w-100 overflow-hidden position-relative ratio ratio-16x9"><iframe loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" class="rounded-4 position-absolute top-0 bottom-0 start-0 end-0 w-100 h-100 border-0 shadow" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
+            return `<div class="w-100 overflow-hidden position-relative ratio ratio-16x9 rounded-4"><iframe loading="lazy" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" class="rounded-4 position-absolute top-0 bottom-0 start-0 end-0 w-100 h-100 border-0" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe></div>`;
           }
           // Default case for plain URLs
           return `<a href="${url}" target="_blank">${url}</a>`;
@@ -199,7 +229,7 @@
             const isUser = message.sender === auth.currentUser.displayName;
             const formattedText = formatMessageText(message.text);
             const messageElement = document.createElement('div');
-            messageElement.className = `card p-3 shadow border-0 my-2 message ${isUser ? 'text-align-right ms-auto bg-light-subtle rounded-top-0 rounded-start-4 rounded-bottom-4' : 'text-align-left me-auto bg-secondary-subtle rounded-top-0 rounded-end-4 rounded-bottom-4'}`;
+            messageElement.className = `card p-3 border-0 my-2 message ${isUser ? 'text-align-right ms-auto bg-light-subtle rounded-top-0 rounded-start-4 rounded-bottom-4' : 'text-align-left me-auto bg-secondary-subtle rounded-top-0 rounded-end-4 rounded-bottom-4'}`;
 
             messageElement.innerHTML = `
                 <div class="message-container">
